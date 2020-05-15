@@ -93,8 +93,22 @@ def player_stats():
 def use_hp_potion():
     if Character.Hp_Potion > 0:
         Character.Health += 45
+        Character.Hp_Potion -= 1
         if Character.Health > 100:
             Character.Health = 100
+    else:
+        no_potions = "You don't have any potions left."
+        return no_potions
+
+
+# Takes potion from the player when giving it to the dog friend
+# No Parameters
+# Returns if you have not potions and that the doggo has been healed
+def give_dog_potion():
+    if Character.Hp_Potion > 0:
+        Character.Hp_Potion -= 1
+        doggo_healed = "You're furry friend wags its tail with joy as it heals."
+        return doggo_healed
     else:
         no_potions = "You don't have any potions left."
         return no_potions
@@ -159,7 +173,8 @@ def second_choice_a():
             print(*player_stats(), "\n"
                   "Your health returns to max and the potion is wasted.")
         elif choice.lower() == "no":
-            pass  # after monster encounter
+            print(*player_stats(), "\n"
+                  "You decide not to heal and your health stays diminished.")
     elif choice.lower() == "run":
         second_choice_a_run()
     else:
@@ -173,18 +188,62 @@ def second_choice_a():
 def second_choice_a_run():
     print(*player_stats(), "\n"
           "You run away but see a group of bandits surrounding something!\n"
-          "Upon unsheathing your sword the bandits scurry away revealing "
+          "Upon unsheathing your sword the bandits scurry away revealing\n"
           "an injured dog, would you like to give it a potion? Yes/No")
     choice = input("> ")
     if choice.lower() == "yes":
         if Character.Hp_Potion > 0:
-            Character.Hp_Potion -= 1
-            print("You give the dog a potion and he recovers from his injuries.")
+            print(give_dog_potion())
+            run_dungeon_a()
     elif choice.lower() == "no":
         print("You leave the dog there to suffer, who is the real monster here.")
+        run_dungeon_b()
     else:
         print("Please you a correct choice.")
         second_choice_a_run()
+
+
+# Prompts player with dungeon after run/heal dog option
+# No Parameters
+# No Returns
+def run_dungeon_a():
+    Character.Health -= 45
+    print(*player_stats(), "\n"
+          "The ground underneath you collapses, and you find yourself in a dungeon. \n" 
+          "You and your new companion have taken a significant amount of damage. \n"
+          "Would you like to drink a potion or give it to your furry friend? Drink/Give")
+    choice = input("> ")
+    if choice.lower() == "drink":
+        use_hp_potion()
+        print(*player_stats(), "\n"
+              "Your health returns to max and the potion is wasted.\n"
+              "The doggo whimpers a little before getting back up.")
+    elif choice.lower() == "give":
+        give_dog_potion()
+    else:
+        print("Please you a correct choice.")
+        run_dungeon_a()
+
+
+# Prompts player with dungeon after run/don't heal dog option
+# No Parameters
+# No Returns
+def run_dungeon_b():
+    Character.Health -= 45
+    print(*player_stats(), "\n"
+          "The ground beneath you collapses and you find yourself in a dungeon.\n"
+          "You take significant damage and the dog from earlier has perished. \n"
+          "Would you like to drink a potion? Yes/No")
+    choice = input("> ")
+    if choice.lower() == "yes":
+        if Character.Hp_Potion > 0:
+            use_hp_potion()
+    elif choice.lower() == "no":
+        print("You leave the dog there to suffer, who is the real monster here.")
+        run_dungeon_b()
+    else:
+        print("Please you a correct choice.")
+        run_dungeon_b()
 
 
 # Prompts player with choice b
