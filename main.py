@@ -264,6 +264,7 @@ def end():
     elif choice.lower == "no":
         title_screen()
 
+
 title_screen()
 system("title " + title)
 ###### Main Game Loop ######
