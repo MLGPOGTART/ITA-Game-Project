@@ -186,6 +186,9 @@ def second_choice_a():
         elif choice.lower() == "no":
             print(*player_stats(), "\n"
                   "You decide not to heal and your health stays diminished.")
+        else:
+            print("Please you a correct choice.")
+            second_choice_a()
     elif choice.lower() == "run":
         second_choice_a_run()
     else:
