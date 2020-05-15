@@ -102,6 +102,15 @@ def use_hp_potion():
         return no_potions
 
 
+# Function for dealing damage to player
+# Amount of damage dealt to the player
+# No Returns
+def player_damage(amount):
+    Character.Health -= amount
+    if Character.Health < 1:
+        Character.dead = True
+
+
 # Takes potion from the player when giving it to the dog friend
 # No Parameters
 # Returns if you have not potions and that the doggo has been healed
@@ -115,6 +124,7 @@ def give_dog_potion():
         return no_potions
 
 
+###### Game Plot Functions ######
 # First encounter of the game and first choice player makes besides a name
 # No Parameters
 # No Returns
@@ -163,7 +173,7 @@ def second_choice_a():
     choice = input("> ")
     if choice.lower() == "slay":
         Character.XP += 1
-        Character.Health -= 45
+        player_damage(45)
         print(*player_stats(), "\n"
               "You kill the monster and you gain 1 XP.\n"
               "The ground beneath you collapses and you find yourself in a dungeon.\n"
@@ -208,7 +218,7 @@ def second_choice_a_run():
 # No Parameters
 # No Returns
 def run_dungeon_a():
-    Character.Health -= 45
+    player_damage(45)
     print(*player_stats(), "\n"
           "The ground underneath you collapses, and you find yourself in a dungeon. \n" 
           "You and your new companion have taken a significant amount of damage. \n"
@@ -230,7 +240,7 @@ def run_dungeon_a():
 # No Parameters
 # No Returns
 def run_dungeon_b():
-    Character.Health -= 45
+    player_damage(45)
     print(*player_stats(), "\n"
           "The ground beneath you collapses and you find yourself in a dungeon.\n"
           "You take significant damage and the dog from earlier has perished. \n"
