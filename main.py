@@ -156,7 +156,8 @@ def second_choice_a():
         choice = input("> ")
         if choice.lower() == "yes":
             use_hp_potion()
-            print(*player_stats(), "")
+            print(*player_stats(), "\n"
+                  "Your health returns to max and the potion is wasted.")
         elif choice.lower() == "no":
             pass  # after monster encounter
     elif choice.lower() == "run":
