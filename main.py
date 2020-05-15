@@ -109,6 +109,8 @@ def player_damage(amount):
     Character.Health -= amount
     if Character.Health < 1:
         Character.dead = True
+        print(name, "has perished!")
+        end()#### not fully complete yet ####
 
 
 # Takes potion from the player when giving it to the dog friend
@@ -186,7 +188,7 @@ def second_choice_a():
     choice = input("> ")
     if choice.lower() == "slay":
         Character.XP += 1
-        player_damage(45)
+        player_damage(150)
         print(*player_stats(), "\n"
               "You kill the monster and you gain 1 XP.\n"
               "The ground beneath you collapses and you find yourself in a dungeon.\n"
@@ -195,7 +197,7 @@ def second_choice_a():
         if choice.lower() == "yes":
             use_hp_potion()
             print(*player_stats(), "\n"
-                  "Your health returns to max and the potion is wasted.")
+                                   "Your health returns to max and the potion is wasted.")
         elif choice.lower() == "no":
             print(*player_stats(), "\n"
                   "You decide not to heal and your health stays diminished.")
@@ -236,7 +238,7 @@ def second_choice_a_run():
 def run_dungeon_a():
     player_damage(45)
     print(*player_stats(), "\n"
-          "The ground underneath you collapses, and you find yourself in a dungeon. \n" 
+          "The ground underneath you collapses, and you find yourself in a dungeon. \n"
           "You and your new companion have taken a significant amount of damage. \n"
           "Would you like to drink a potion or give it to your furry friend? Drink/Give")
     choice = input("> ")
@@ -284,12 +286,15 @@ def second_choice_b():
 # No Parameters
 # No Returns
 def end():
+    global playing
     print("Would you like to play again? Yes/No")
     choice = input("> ")
     if choice.lower() == "yes":
         game_reset()
+        playing = True
     elif choice.lower() == "no":
         game_reset()
+        playing = True
         title_screen()
     else:
         print("Please use a correct choice.")
@@ -304,3 +309,6 @@ while playing:
     name = player_name()
     first_choice()
     end()
+while Character.dead:
+    playing = False
+
