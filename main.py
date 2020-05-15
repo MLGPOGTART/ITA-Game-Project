@@ -67,6 +67,7 @@ class Character:
     Gold = 0
     Hp_Potion = 0
     Sword = None
+    dead = False
 
 
 # Grabs input from user for player name
@@ -265,8 +266,8 @@ def end():
         title_screen()
 
 
-title_screen()
 system("title " + title)
+title_screen()
 ###### Main Game Loop ######
 while playing:
     # function(encounter, etc) call order
