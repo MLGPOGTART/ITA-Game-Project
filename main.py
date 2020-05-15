@@ -239,8 +239,7 @@ def run_dungeon_b():
         if Character.Hp_Potion > 0:
             use_hp_potion()
     elif choice.lower() == "no":
-        print("You leave the dog there to suffer, who is the real monster here.")
-        run_dungeon_b()
+        print("You decide not to heal yourself and your health stays diminished.")
     else:
         print("Please you a correct choice.")
         run_dungeon_b()
@@ -266,11 +265,11 @@ def end():
         title_screen()
 
 
+title_screen()
 system("title " + title)
 ###### Main Game Loop ######
 while playing:
     # function(encounter, etc) call order
-    title_screen()
     name = player_name()
     first_choice()
     end()
