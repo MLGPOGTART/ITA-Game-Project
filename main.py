@@ -92,7 +92,7 @@ def player_stats():
 # Returns if the player has no potions left
 def use_hp_potion():
     if Character.Hp_Potion > 0:
-        Character.Health += 30
+        Character.Health += 45
         if Character.Health > 100:
             Character.Health = 100
     else:
@@ -148,7 +148,7 @@ def second_choice_a():
     choice = input("> ")
     if choice.lower() == "slay":
         Character.XP += 1
-        Character.Health -= 30
+        Character.Health -= 45
         print(*player_stats(), "\n"
               "You kill the monster and you gain 1 XP.\n"
               "The ground beneath you collapses and you find yourself in a dungeon.\n"
@@ -156,7 +156,7 @@ def second_choice_a():
         choice = input("> ")
         if choice.lower() == "yes":
             use_hp_potion()
-            print(*player_stats())
+            print(*player_stats(), "")
         elif choice.lower() == "no":
             pass  # after monster encounter
     elif choice.lower() == "run":
