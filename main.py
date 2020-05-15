@@ -124,13 +124,26 @@ def give_dog_potion():
         return no_potions
 
 
+# Resets the player stats for replaying
+# No Parameters
+# No Returns
+def game_reset():
+    Character.Health = 100
+    Character.Mana = 50
+    Character.Hp_Potion = 0
+    Character.XP = 0
+    Character.Sword = None
+    Character.Gold = 0
+    Character.dead = False
+
+
 ###### Game Plot Functions ######
 # First encounter of the game and first choice player makes besides a name
 # No Parameters
 # No Returns
 def first_choice():
     print("You wake up and a dreadful stench fills the air.\n"
-          "Standing up you scan the your surroundings.\n"
+          "Standing up you scan your surroundings.\n"
           "You notice a chest would you like to open it? Yes/No")
     choice = input("> ")
     if choice.lower() == "yes":
@@ -273,10 +286,14 @@ def second_choice_b():
 def end():
     print("Would you like to play again? Yes/No")
     choice = input("> ")
-    if choice.lower == "yes":
-        pass
-    elif choice.lower == "no":
+    if choice.lower() == "yes":
+        game_reset()
+    elif choice.lower() == "no":
+        game_reset()
         title_screen()
+    else:
+        print("Please use a correct choice.")
+        end()
 
 
 system("title " + title)
