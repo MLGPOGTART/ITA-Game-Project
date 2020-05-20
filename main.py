@@ -68,6 +68,10 @@ class Character:
     Hp_Potion = 0
     Sword = None
     dead = False
+    puzzle_pouch = False
+    puzzle_chances = 0
+    blacksmith_path = False
+    dog = False
 
 
 # Class from Creating Doggo
@@ -167,6 +171,15 @@ def game_reset():
     Character.Sword = None
     Character.Gold = 0
     Character.dead = False
+    Character.puzzle_pouch = False
+    Character.puzzle_chances = 0
+    Character.blacksmith_path = False
+    Character.dog = False
+
+    Dog.Health = 50
+    Dog.XP = 0
+    Dog.Gold = 0
+    Dog.dead = False
 
 
 ###### Game Plot Functions ######
@@ -239,6 +252,7 @@ def door1_run():
           "an injured dog, would you like to give it a potion? Yes/No")
     choice = input("> ")
     if choice.lower() == "yes":
+        Character.dog = True
         if Character.Hp_Potion > 0:
             print(give_dog_potion())
             door1_run_a()
@@ -310,10 +324,7 @@ def sulfur_two_pathways():
         print("The smell of sulfur grows stronger. You follow the scent.")
         ogre_path()
     elif choice.lower() == "path 2":
-        print("You hear a faint clanging noise. You follow the noise and to your\n"
-              "surprise its a blacksmith. But wait! He's levitating over lava.\n"
-              "He Slowly turns around to look at you, and you begin to feel\n"
-              "spiders crawling down your back.")
+        blacksmith_path()
     else:
         print("Please use a correct choice.")
         sulfur_two_pathways()
@@ -331,13 +342,35 @@ def sulfur_two_pathways_dog():
               "with your doggo close behind.")
         ogre_path()
     elif choice.lower() == "path 2":
-        print("You hear a faint clanging noise and your companion whimpers.\n"
-              "You follow the noise and to your surprise its a blacksmith.\n"
-              "But wait! He's levitating over lava. He slowly turns around\n "
-              "to look at you, and you begin to feel spiders crawling down your back.")
+        blacksmith_path()
     else:
         print("Please use a correct choice.")
         sulfur_two_pathways()
+
+
+#
+#
+#
+def blacksmith_path():
+    print("You hear a faint clanging noise and your companion whimpers.\n"
+          "You follow the noise and to your surprise its a blacksmith.\n"
+          "But wait! He's levitating over lava. He slowly turns around\n "
+          "to look at you, and you begin to feel spiders crawling down your back.\n"
+          "He slowly levitates towards you, and you try to get away.\n"
+          "He points out that there seems to be trouble ahead and asks if you need help\n"
+          "Yes/No")
+    choice = input("> ")
+    if choice.lower() == "yes":
+        Character.blacksmith_path = True
+        print("You accept his aid and he teleports you to a room with a lever.\n"
+              "He mentions that he will call you when he needs you.")
+        symbol_puzzle()
+    elif choice.lower() == "no":
+        print("You decline and keep walking through the dungeon.")
+        ogre_path()
+    else:
+        print("Please choose a correct choice.")
+        blacksmith_path()
 
 
 # Prompts player with ogre choice between sneaking or taking the pouch
@@ -349,7 +382,8 @@ def ogre_path():
     if choice.lower() == "take":
         ogre_take()
     elif choice.lower() == "sneak":
-        ogre_sneak()
+        print("You stealthily sneak past the Ogre and book it as soon as possible.")
+        symbol_puzzle()
     else:
         print("Please use a correct choice.")
         ogre_path()
@@ -359,21 +393,173 @@ def ogre_path():
 # No Parameters
 # No Returns
 def ogre_take():
+    Character.Gold += 50
+    Character.puzzle_pouch = True
     print("You walk near the ogre and quickly snatch the pouch.\n"
-          "Success! However the you have angered the Ogre you begin to battle.\n"
+          "Success! However you have angered the Ogre you begin to battle.\n"
           "Slashing at the Ogre you miss, and it swings its club at you.\n"
           "Managing to dodge it you slash it with your sword and succeed.\n"
           "It took little damage nonetheless the Ogre flees and you open the pouch\n"
-          "YOU FIND GOLD!! Maybe you can use it to escape.")
+          "YOU FIND GOLD!! Maybe you can use it to escape. You move on to the next room.")
+    symbol_puzzle()
 
 
-# Player sneaks away from ogre into next room
+# Player must complete a puzzle
 # No Parameters
 # No Returns
-def ogre_sneak():
-    print("You stealthily sneak past the Ogre and book it as soon as possible.\n"
-          "There's a switch at the end of this room and when you look back\n"
-          "the path you came from is but a plain wall. You flip the switch.")
+def symbol_puzzle():
+    print("There's a switch at the end of this room and when you look back\n"
+          "the path you came from is but a plain wall. You flip the switch.\n"
+          "Strange Symbols appear on the wall Alpha, Beta, Omega. A PUZZLE!!\n"
+          "There are three symbols and you have to get them in the right order\n")
+    if Character.puzzle_pouch:
+        print("Do you want to use the pouch of gold? Yes/No")
+        choice = input("> ")
+        if choice.lower() == "yes":
+            Character.puzzle_pouch = False
+            Character.Gold -= 50
+            print("You open the pouch and select a coin randomly. Its an Alpha symbol.")
+            puzzle()
+        elif choice.lower() == "no":
+            print("You save the gold and get a confidence boost.")
+            puzzle()
+        else:
+            print("Please choose a correct choice.")
+            symbol_puzzle()
+    elif not Character.puzzle_pouch:
+        puzzle()
+
+
+# Executes code for calling puzzle choices and victory text
+# No Parameters
+# No Returns
+def puzzle():
+    puzzle_choice1()
+    puzzle_choice2()
+    puzzle_choice3()
+    print("You got them all right nice. It took", Character.puzzle_chances, "tries.")
+    after_puzzle()
+
+
+# Gets players input for first puzzle choice
+# No Parameters
+# No Returns
+def puzzle_choice1():
+    correct = "alpha"
+    choice = ""
+    print("Alpha, Beta, or Omega?")
+    while choice.lower() != correct:
+        choice = input("> ")
+        Character.puzzle_chances += 1
+    print("You got the first one right whats next!")
+
+
+# Gets players input for second puzzle choice
+# No Parameters
+# No Returns
+def puzzle_choice2():
+    correct = "beta"
+    choice = ""
+    print("Alpha, Beta, or Omega?")
+    while choice.lower() != correct:
+        choice = input("> ")
+        Character.puzzle_chances += 1
+    print("You got the second one right whats next!")
+
+
+# Gets players input for third puzzle choice
+# No Parameters
+# No Returns
+def puzzle_choice3():
+    correct = "omega"
+    choice = ""
+    print("Alpha, Beta, or Omega?")
+    while choice.lower() != correct:
+        choice = input("> ")
+        Character.puzzle_chances += 1
+
+
+# Function for telling whether the blacksmith helped the player
+# No Parameters
+# No Returns
+def after_puzzle():
+    print("The dungeon rumble around you!")
+    if Character.blacksmith_path:
+        after_puzzle_blacksmith()
+    elif not Character.blacksmith_path:
+        after_puzzle2()
+
+
+# After the puzzle blacksmith asks for your body
+# No Parameters
+# No Returns
+def after_puzzle_blacksmith():
+    print("The Blacksmith appears after you guess the order.\n"
+          "He says he's been a spirit stuck in the dungeon for\n"
+          "a thousand years. He needs a body to hold his curse.")
+    if Character.dog:
+        print("Do you give up your dog or try to trick him? Dog/Trick")
+        choice = input("> ")
+        if choice.lower() == "dog":
+            print("He transfers his mind into your doggo and his its eyes glow red.\n"
+                  "It attacks you but you cant bring yourself to hurt it and end up perishing\n"
+                  "as the newly mind transferred dog tears you limb from limb.")
+        elif choice.lower() == "trick":
+            kill_rat_choice()
+        else:
+            print("Please choose a correct option.")
+            after_puzzle_blacksmith()
+    elif not Character.dog:
+        print("Do you give yourself to him or try and trick him? You/Trick")
+        choice = input("> ")
+        if choice.lower() == "you":
+            print("You give your body to the blacksmith and live on with someone in your head.")
+        elif choice.lower() == "trick":
+            kill_rat_choice()
+        else:
+            print("Please use a correct option.")
+            after_puzzle_blacksmith()
+
+
+# Prompts player for choice on whether to kill or keep your rat friend(ending)
+# No Parameters
+# No Returns
+def kill_rat_choice():
+    print("You try to think of something on the spot but by dumb luck you pick up a rat\n"
+          "and his mind is transferred into it. You pick it up and inspect it then put\n"
+          "it back into your pocket. You find your way to the village")
+    if Character.dog:
+        print("with both your furry companions.")
+    print("What will you do with your new friend? Throw it into the alley full of cats or keep him.\n"
+          "Cats/Keep")
+    choice = input("> ")
+    if choice.lower() == "cats":
+        print("You throw it into the alley and watch it suffer as it tries to escape.\n"
+              "The cats tear him to pieces until it is a red puddle of life juices.\n"
+              "Who was the evil one in the end. You Live happily ever after in your village.\n")
+    elif choice.lower() == "keep":
+        print("You look at your new rat friend")
+        if Character.dog:
+            print("and your doggo.")
+        print("and you live happily ever after")
+    else:
+        print("Please use a correct choice.")
+        kill_rat_choice()
+
+
+# End of the game by dungeon path without blacksmith
+# No Parameters
+# No Returns
+def after_puzzle2():
+    print("You wake up and hear birds chirping and people conversing.\n"
+          "you find yourself laying on the ground feeling groggy, \n"
+          "you stand up and start walking towards the noise. Its your village!\n"
+          "You have finally found your way back.")
+    if Character.puzzle_pouch:
+        print("You use the ouch of gold to purchase amenities.\n"
+              "You live happily ever after in the village you belong.")
+    elif not Character.puzzle_pouch:
+        print("You live happily ever after in the village you belong.")
 
 
 # Prompts player with choice b
