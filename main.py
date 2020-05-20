@@ -586,7 +586,9 @@ def door2():
 # No Parameters
 # No Returns
 def castle_entrance():
-    print("You scavenge the castle but there was nothing but broken tools.")
+    print("You scavenge the castle but there was nothing but broken tools.\n"
+          "Then you walk back outside.")
+    explore_forest()
 
 
 # Player Explores forest and prompts for trade option
