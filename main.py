@@ -1,11 +1,8 @@
 import sys
 import os
-import time
 from os import system
-import random
-import pickle
-import cmd
-import textwrap
+from playsound import playsound
+
 
 playing = True
 title = "Gamer Moment"
@@ -130,8 +127,7 @@ def player_damage(amount):
     Character.Health -= amount
     if Character.Health < 1:
         Character.dead = True
-        print(name, "has perished!")
-        end()#### not fully complete yet ####
+        print(name, "has perished...")
 
 
 # Function for dealing damage to Doggo
@@ -192,6 +188,7 @@ def first_choice():
           "You notice a chest would you like to open it? Yes/No")
     choice = input("> ")
     if choice.lower() == "yes":
+        playsound("chest.mp3")
         Character.Sword = "Long Sword"
         Character.Hp_Potion += 5
         print("Upon opening the chest you find a Long Sword and some potions.")
@@ -627,14 +624,16 @@ def potion_trade():
     if choice.lower() == "clean":
         Character.Sword = "Knife"
         print("You clean the knife and now have a new knife.")
+        water_monster_knife()
     elif choice.lower() == "don't":
-        print("You decide to not clean the knife and keep walking.")
+        print("You decide to not clean the knife and drink some water instead.")
+        water_monster_knife()
     else:
         print("Please use a correct choice.")
         potion_trade()
 
 
-# Player gets chased by merhcants and ends up near a lake
+# Player gets chased by merchants and ends up near a lake
 # No Parameters
 # No Returns
 def keep_walking():
@@ -642,7 +641,78 @@ def keep_walking():
           "trouble. Some Merchants start to follow you and that knife\n"
           "they had would've come in handy right now. You run away and\n"
           "while trying to lose them you take cove in a bush while they scatter.\n"
-          "After hearing water you realize you've ended up near a lake.")
+          "After hearing water you realize you've ended up near a lake. Drink/Don't")
+    choice = input("> ")
+    if choice.lower() == "drink":
+        print("You drink the water and feel hydrated.")
+        water_monster_noknife()
+    elif choice.lower() == "don't":
+        water_monster_noknife()
+    else:
+        print("Please use a correct choice.")
+        keep_walking()
+
+
+# Water monster encounter with knife
+# No Parameters
+# No Returns
+def water_monster_knife():
+    print("The water begins to splash as the earth rumbles beneath you.\n"
+          "A water monster appears!! You have no choice but to fight the\n"
+          "monster, its the only way you can get across!")
+    if Character.Sword == "Rusty Knife":
+        player_damage(99)
+        print("You look at your rusty knife and your confidence drops.\n"
+              "As you close your eyes giving in to your fate you hear a noise.\n"
+              "Waking up you open your eyes and you see your village in the distance.\n"
+              "A tear rolls down your eyes as you pass on.")
+        player_damage(10)
+    elif Character.Sword == "Knife":
+        player_damage(99)
+        print(*player_stats(), "\n"
+              "All you have is a measly knife but you are determined.\n"
+              "You attempt to hit the monster but you miss and you\n"
+              "fight the monster in a long drawn out battle ending in your victory.\n"
+              "You lost your knife and your potions and limp through the pain.\n"
+              "In your last effort to return to your village you feel\n"
+              "the cruel chill of your inevitable demise. You collapse\n"
+              "but by the time anyone comes to your aid it is too late.\n")
+        player_damage(10)
+
+
+# Water monster encounter without the knife
+# No Parameters
+# No Returns
+def water_monster_noknife():
+    print("The water begins to splash as the earth rumbles beneath you.\n"
+          "A water monster appears!! You have no choice but to fight the\n"
+          "monster, its the only way you can get across!\n"
+          "You have no weapon so you have to be wary of all your decisions.\n"
+          "All you have is a potion, the monster attacks first dealing 5 damage.")
+    player_damage(5)
+    print("You hear someone call your name, it's you're best friend!\n"
+          "The monster swings again but your friend takes the hit,\n"
+          "his shield breaks. You pick up his sword and try to fight\n"
+          "landing a hit, but you know there's more to come.\n"
+          "Both you and the monster are low and you hit it one more time\n"
+          "as it retreats. Do you want to use your potion on yourself or your friend?\n"
+          "You/Friend")
+    player_damage(90)
+    print(*player_stats())
+    choice = input("> ")
+    if choice.lower() == "you":
+        use_hp_potion()
+        print("You take the potion and your friend dies in your arms.\n"
+              "Sticking the sword in his grave with tears in your eyes\n"
+              "in memory of his death. You walk into the sunset and live on for him.")
+    elif choice.lower() == "friend":
+        Character.Hp_Potion -= 1
+        print("You give the potion to your friend before you cant move anymore.\n"
+              "He wakes up after healing and witnesses your final moments.")
+        player_damage(100)
+    else:
+        print("Please use a correct choice.")
+        water_monster_noknife()
 
 
 # Prompts player with whether they want to play again or not
@@ -674,4 +744,3 @@ while playing:
     end()
 while Character.dead:
     playing = False
-
